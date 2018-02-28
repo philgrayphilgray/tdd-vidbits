@@ -8,6 +8,6 @@ describe("when the user visits the `videos/create` page", () => {
     browser.setValue("form input[name=title]", title);
     browser.setValue("form textarea", description);
     browser.click(".submit-button");
-    assert.include(browser.getText("body"), "Videos");
+    assert.include(browser.getText(".contents-container"), "Videos");
   });
 });
