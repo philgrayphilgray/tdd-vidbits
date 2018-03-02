@@ -3,10 +3,7 @@ const request = require('supertest');
 
 const app = require('../../app');
 const Video = require('../../models/video');
-const {
-  connectDatabase,
-  disconnectDatabase
-} = require('../database-utiliteis');
+const { mongoose, databaseUrl, options } = require('../../database');
 
 describe('Server path: `/videos`', () => {
   describe('POST', () => {
