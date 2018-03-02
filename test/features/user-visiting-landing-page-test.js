@@ -13,3 +13,17 @@ describe('when a user visits the landing page with no existing videos', () => {
     assert.include(browser.getText('body'), 'Save a video');
   });
 });
+
+describe('when a user visits the landing page with an exiting video', () => {
+  it('renders it in the list', () => {
+    const title = 'Magnetic Sound Effects';
+    const description = 'Collection of interesting magnetic sounds';
+
+    browser.url('/videos/create');
+    browser.setValue('form input[name=title]', title);
+    browser.setValue('form textarea', description);
+    browser.click('.submit-button');
+    browser.url('/');
+    assert.include(browser.getText('#videos-container'), title);
+  });
+});
