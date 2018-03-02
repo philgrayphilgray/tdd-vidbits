@@ -5,7 +5,7 @@ describe('when the user visits the `videos/create` page', () => {
     const title = 'Magnetic Sound Effects';
     const description = 'Collection of interesting magnetic sounds';
     it('it returns the user to the landing page which contains the newly submitted information', () => {
-      browser.url('/videos/create.html');
+      browser.url('/videos/create');
       browser.setValue('form input[name=title]', title);
       browser.setValue('form textarea', description);
       browser.click('.submit-button');
