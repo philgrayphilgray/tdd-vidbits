@@ -38,6 +38,18 @@ describe('Server path: `/videos`', () => {
         video.title
       );
     });
+
+    describe('/videos/:id', () => {
+      it('should render a specific video page', async () => {
+        const video = await Video.create(testVideoToCreate);
+        const response = await request(app).get(`/videos/${video._id}`);
+
+        assert.include(
+          parseFromHTML(response.text, '.contents-container'),
+          video.title
+        );
+      });
+    });
   });
 
   describe('POST', () => {

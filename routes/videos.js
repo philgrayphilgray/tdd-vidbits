@@ -23,4 +23,9 @@ router.get('/', async (req, res, next) => {
   res.status(201).render('videos/index', { videos });
 });
 
+router.get('/:videoId', async (req, res, next) => {
+  const video = await Video.findById({ _id: req.params.videoId });
+  res.render('videos/show', { video });
+});
+
 module.exports = router;
