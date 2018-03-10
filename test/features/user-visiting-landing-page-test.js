@@ -26,4 +26,18 @@ describe('when a user visits the landing page with an exiting video', () => {
     browser.url('/');
     assert.include(browser.getText('#videos-container'), title);
   });
+
+  it('renders an iframe with a video URL', () => {
+    const title = 'Magnetic Sound Effects';
+    const description = 'Collection of interesting magnetic sounds';
+    const videoUrl = 'https://www.youtube.com/watch?v=Du1a_dgGoXc';
+
+    browser.url('/videos/create');
+    browser.setValue('form input[name=title]', title);
+    browser.setValue('form textarea', description);
+    browser.setValue('form input[name=url]', videoUrl);
+    browser.click('.submit-button');
+    browser.url('/');
+    assert.equal(browser.getAttribute('iframe', 'src'), 'http://example.com/');
+  });
 });

@@ -6,13 +6,13 @@ router.get('/create', (req, res) => {
 });
 
 router.post('/', async (req, res, next) => {
-  let { title, description } = req.body;
+  let { title, description, videoUrl } = req.body;
   if (!title) {
     const error = 'Title is required.';
-    res.render('videos/create', { title, description, error });
+    res.render('videos/create', { title, description, videoUrl, error });
     res.status(400);
   } else {
-    const video = await new Video({ title, description });
+    const video = await new Video({ title, description, videoUrl });
     await video.save();
     res.redirect(`/videos/${video._id}`);
   }
