@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "nodemon ./bin/www",
     "test": "bin/mocha-test && bin/wdio-test",
     "test:mocha": "bin/mocha-test || exit 0",
     "test:feature": "bin/wdio-test || exit 0"
@@ -22,6 +22,7 @@
     "eslint-config-google": "^0.9.1",
     "jsdom": "^9.12.0",
     "mocha": "^3.0.0",
+    "nodemon": "^1.17.1",
     "supertest": "^3.0.0",
     "wdio-mocha-framework": "^0.4.0",
     "wdio-phantomjs-service": "^0.2.2",
