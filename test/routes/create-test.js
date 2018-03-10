@@ -25,12 +25,12 @@ describe('Server path: `/videos`', () => {
   afterEach(disconnectDatabase);
 
   describe('POST', () => {
-    it('responds to new video creation with the status code 201', async () => {
+    it('responds to new video creation with the status code 302', async () => {
       const response = await request(app)
         .post('/videos')
         .type('form')
         .send({ title: 'Magnetic Sound Effects' });
-      assert.equal(response.status, 201);
+      assert.equal(response.status, 302);
     });
   });
   describe('when a video is submitted to the server', () => {
@@ -46,10 +46,16 @@ describe('Server path: `/videos`', () => {
         .send(sampleData);
 
       const video = await Video.findOne({});
+
       assert.equal(video.title, sampleData.title);
-      assert.equal(parseTextFromHTML(response.text, 'h2'), sampleData.title);
+
+      // now check the video page
+      const { _id } = video;
+      const getResponse = await request(app).get(`/videos/${_id}`);
+
+      assert.equal(parseTextFromHTML(getResponse.text, 'h2'), sampleData.title);
       assert.equal(
-        parseTextFromHTML(response.text, 'p'),
+        parseTextFromHTML(getResponse.text, 'p'),
         sampleData.description
       );
     });

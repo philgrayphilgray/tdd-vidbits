@@ -14,7 +14,7 @@ router.post('/', async (req, res, next) => {
   } else {
     const video = await new Video({ title, description });
     await video.save();
-    res.status(201).render('videos/show', { video });
+    res.redirect(`/videos/${video._id}`);
   }
 });
 
