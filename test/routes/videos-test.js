@@ -68,6 +68,21 @@ describe('Server path: `/videos`', () => {
 
         assert.equal(response.status, 400);
       });
+
+      it('renders `videos/create`', async () => {
+        const { description } = testVideoToCreate;
+        const testVideoToCreateWithoutTitle = { description };
+
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(testVideoToCreateWithoutTitle);
+
+        assert.include(
+          parseTextFromHTML(response.text, '.submit-button'),
+          'Save'
+        );
+      });
     });
   });
 });
