@@ -9,10 +9,10 @@ const {
 } = require('../database-utilities');
 const Video = require('../../models/video');
 
-const parseTextFromHTML = (htmlAsString, selector) => {
+const parseFromHTML = (htmlAsString, selector, type = 'textContent') => {
   const selectedElement = jsdom(htmlAsString).querySelector(selector);
   if (selectedElement !== null) {
-    return selectedElement.textContent;
+    return selectedElement[type];
   } else {
     throw new Error(
       `No element with selector ${selector} found in HTML string.`
@@ -34,7 +34,7 @@ describe('Server path: `/videos`', () => {
       const response = await request(app).get('/videos');
 
       assert.include(
-        parseTextFromHTML(response.text, '#videos-container'),
+        parseFromHTML(response.text, '#videos-container'),
         video.title
       );
     });
@@ -78,10 +78,7 @@ describe('Server path: `/videos`', () => {
           .type('form')
           .send(testVideoToCreateWithoutTitle);
 
-        assert.include(
-          parseTextFromHTML(response.text, '.submit-button'),
-          'Save'
-        );
+        assert.include(parseFromHTML(response.text, '.submit-button'), 'Save');
       });
 
       it('renders a validation error message', async () => {
@@ -94,8 +91,8 @@ describe('Server path: `/videos`', () => {
           .send(testVideoToCreateWithoutTitle);
 
         assert.include(
-          parseTextFromHTML(response.text, '.contents-container'),
-          'Title is required.'
+          parseFromHTML(response.text, 'textarea[name="description"]', 'value'),
+          description
         );
       });
     });
