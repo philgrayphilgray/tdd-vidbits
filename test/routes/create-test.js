@@ -28,7 +28,8 @@ describe('Server path: `/videos`', () => {
     it('responds to new video creation with the status code 201', async () => {
       const response = await request(app)
         .post('/videos')
-        .type('form');
+        .type('form')
+        .send({ title: 'Magnetic Sound Effects' });
       assert.equal(response.status, 201);
     });
   });
