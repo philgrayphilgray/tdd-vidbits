@@ -54,9 +54,19 @@ describe('Server path: `/videos`', () => {
 
         const allItems = await Video.find({});
 
-        console.log(allItems);
-
         assert.isEmpty(allItems);
+      });
+
+      it('responds with a status `400`', async () => {
+        const { description } = testVideoToCreate;
+        const testVideoToCreateWithoutTitle = { description };
+
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(testVideoToCreateWithoutTitle);
+
+        assert.equal(response.status, 400);
       });
     });
   });
