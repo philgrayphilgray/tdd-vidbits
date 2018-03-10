@@ -20,7 +20,7 @@ const parseTextFromHTML = (htmlAsString, selector) => {
   }
 };
 
-describe('Server path: `/`', () => {
+describe('Server path: `/videos`', () => {
   beforeEach(connectDatabase);
   afterEach(disconnectDatabase);
   const testVideoToCreate = {
@@ -31,7 +31,7 @@ describe('Server path: `/`', () => {
   describe('GET', () => {
     it('includes the values for a newly created video', async () => {
       const video = await Video.create(testVideoToCreate);
-      const response = await request(app).get('/');
+      const response = await request(app).get('/videos');
 
       assert.include(
         parseTextFromHTML(response.text, '#videos-container'),
