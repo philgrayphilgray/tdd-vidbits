@@ -8,7 +8,8 @@ router.get('/create', (req, res) => {
 router.post('/', async (req, res, next) => {
   let { title, description } = req.body;
   if (!title) {
-    res.render('videos/create', { title, description });
+    const error = 'Title is required.';
+    res.render('videos/create', { title, description, error });
     res.status(400);
   } else {
     const video = await new Video({ title, description });

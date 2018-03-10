@@ -83,6 +83,21 @@ describe('Server path: `/videos`', () => {
           'Save'
         );
       });
+
+      it('renders a validation error message', async () => {
+        const { description } = testVideoToCreate;
+        const testVideoToCreateWithoutTitle = { description };
+
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(testVideoToCreateWithoutTitle);
+
+        assert.include(
+          parseTextFromHTML(response.text, '.contents-container'),
+          'Title is required.'
+        );
+      });
     });
   });
 });
