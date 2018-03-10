@@ -6,10 +6,14 @@ router.get('/create', (req, res) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const { title, description } = req.body;
-  const video = await new Video({ title, description });
-  await video.save();
-  res.status(201).render('videos/show', { video });
+  let { title, description } = req.body;
+  if (!title) {
+    res.render('create'), { title, description };
+  } else {
+    const video = await new Video({ title, description });
+    await video.save();
+    res.status(201).render('videos/show', { video });
+  }
 });
 
 router.get('/', async (req, res, next) => {
