@@ -39,4 +39,25 @@ describe('Server path: `/videos`', () => {
       );
     });
   });
+
+  describe('POST', () => {
+    describe('when the title is missing', () => {
+      it('does not save the video', async () => {
+        // copy with only the description property
+        const { description } = testVideoToCreate;
+        const testVideoToCreateWithoutTitle = { description };
+
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(testVideoToCreateWithoutTitle);
+
+        const allItems = await Video.find({});
+
+        console.log(allItems);
+
+        assert.isEmpty(allItems);
+      });
+    });
+  });
 });
