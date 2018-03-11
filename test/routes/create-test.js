@@ -20,6 +20,12 @@ const parseTextFromHTML = (htmlAsString, selector) => {
   }
 };
 
+const sampleData = {
+  title: 'Magnetic Sound Effects',
+  description: 'Collection of interesting magnetic sounds',
+  url: 'https://www.youtube.com/embed/Du1a_dgGoXc'
+};
+
 describe('Server path: `/videos`', () => {
   beforeEach(connectDatabase);
   afterEach(disconnectDatabase);
@@ -29,16 +35,11 @@ describe('Server path: `/videos`', () => {
       const response = await request(app)
         .post('/videos')
         .type('form')
-        .send({ title: 'Magnetic Sound Effects' });
+        .send(sampleData);
       assert.equal(response.status, 302);
     });
   });
   describe('when a video is submitted to the server', () => {
-    const sampleData = {
-      title: 'Magnetic Sound Effects',
-      description: 'Collection of interesting magnetic sounds'
-    };
-
     it('submits a video with a title and description', async () => {
       const response = await request(app)
         .post('/videos')
