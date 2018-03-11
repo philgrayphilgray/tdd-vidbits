@@ -1,4 +1,14 @@
 <div class="contents-container">
-    <h2>{{video.title}}</h2>
-    <p>{{video.description}}</p>
+    <div class="video-card">
+
+        <div class="video-title">
+            <h1>{{video.title}}</h1>
+        </div>
+        {{#if video.url}}
+        <iframe class="video-player" src={{video.url}} frameborder="0" allowfullscreen></iframe>
+        {{/if}} {{!-- TODO: Move this check to route or model --}}
+        <div class="video-description">
+            <p>{{video.description}}</p>
+        </div>
+    </div>
 </div>

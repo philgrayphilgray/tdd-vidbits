@@ -53,7 +53,7 @@ describe('Server path: `/videos`', () => {
       const { _id } = video;
       const getResponse = await request(app).get(`/videos/${_id}`);
 
-      assert.equal(parseTextFromHTML(getResponse.text, 'h2'), sampleData.title);
+      assert.equal(parseTextFromHTML(getResponse.text, 'h1'), sampleData.title);
       assert.equal(
         parseTextFromHTML(getResponse.text, 'p'),
         sampleData.description

@@ -50,14 +50,14 @@ describe('Server path: `/videos`', () => {
       );
     });
 
-    describe('/videos/:id', () => {
-      it('should render a specific video page', async () => {
+    describe('/videos/:videoId', () => {
+      it('should render a page with an iframe with the correct video URL as the src', async () => {
         const video = await Video.create(testVideoToCreate);
         const response = await request(app).get(`/videos/${video._id}`);
 
         assert.include(
-          parseFromHTML(response.text, '.contents-container'),
-          video.title
+          parseFromHTML(response.text, 'iframe', 'src'),
+          video.url
         );
       });
     });
