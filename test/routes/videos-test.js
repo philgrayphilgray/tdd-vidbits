@@ -26,7 +26,7 @@ describe('Server path: `/videos`', () => {
   const testVideoToCreate = {
     title: 'Magnetic Sound Effects',
     description: 'Collection of interesting magnetic sounds',
-    videoUrl: 'https://www.youtube.com/watch?v=Du1a_dgGoXc'
+    url: 'https://www.youtube.com/watch?v=Du1a_dgGoXc'
   };
 
   describe('GET', () => {
@@ -62,7 +62,7 @@ describe('Server path: `/videos`', () => {
 
       const video = await Video.findOne({});
 
-      assert.equal(video.videoUrl, testVideoToCreate.videoUrl);
+      assert.equal(video.url, testVideoToCreate.url);
     });
 
     describe('when the title is missing', () => {

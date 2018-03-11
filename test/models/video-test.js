@@ -31,9 +31,9 @@ describe('Video model', () => {
   describe('#url', () => {
     it('is a string', () => {
       const urlAsInt = 666;
-      const video = new Video({ videoUrl: urlAsInt });
+      const video = new Video({ url: urlAsInt });
 
-      assert.strictEqual(video.videoUrl, urlAsInt.toString());
+      assert.strictEqual(video.url, urlAsInt.toString());
     });
   });
 });
