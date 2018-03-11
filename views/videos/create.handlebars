@@ -1,12 +1,12 @@
 <div class="contents-container">
     <h2>Save a video</h2>
     <form method="post" action="/videos">
-        <label for="title">Title</label>
-        <input type="text" name="title" value={{description}}> {{#if error}}
-        <span class="error">{{error}}</span>
-        {{/if}}
-        <textarea name="description" cols="30" rows="10">{{description}}</textarea>
-        <input type="url" name="url" value={{url}}>
+        {{#with video.errors.title as |error|}}
+        <span class="error">{{error.message}}</span>
+        {{/with}}
+        <input type="text" name="title" value={{video.title}}>
+        <textarea name="description" cols="30" rows="10">{{video.description}}</textarea>
+        <input type="url" name="url" value={{video.url}}>
         <button type="submit" class="submit-button">Save</button>
     </form>
 </div>

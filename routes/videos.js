@@ -7,12 +7,12 @@ router.get('/create', (req, res) => {
 
 router.post('/', async (req, res, next) => {
   let { title, description, url } = req.body;
-  if (!title) {
-    const error = 'Title is required.';
-    res.render('videos/create', { title, description, url, error });
-    res.status(400);
+
+  const video = await new Video({ title, description, url });
+  video.validateSync();
+  if (video.errors) {
+    res.status(400).render('videos/create', { video });
   } else {
-    const video = await new Video({ title, description, url });
     await video.save();
     res.redirect(`/videos/${video._id}`);
   }

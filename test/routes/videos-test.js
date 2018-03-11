@@ -123,8 +123,22 @@ describe('Server path: `/videos`', () => {
           .post('/videos')
           .type('form')
           .send(testVideoToCreateWithoutTitle);
-
+        console.log(response.text);
         assert.include(
+          parseFromHTML(response.text, '.error'),
+          'Title is required.'
+        );
+      });
+
+      it('preserves other field values', async () => {
+        const { description } = testVideoToCreate;
+        const testVideoToCreateWithoutTitle = { description };
+
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(testVideoToCreateWithoutTitle);
+        assert.equal(
           parseFromHTML(response.text, 'textarea[name="description"]', 'value'),
           description
         );
