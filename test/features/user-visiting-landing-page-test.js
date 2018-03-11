@@ -1,6 +1,25 @@
 const { assert } = require('chai');
 
-// const generateRandomUrl = domain => `http//${domain}/${Math.random()}`;
+const title = {
+  value: 'Magnetic Sound Effects',
+  selector: 'form input[name=title]'
+};
+const description = {
+  value: 'Collection of interesting magnetic sounds',
+  selector: 'form textarea'
+};
+const url = {
+  value: 'https://www.youtube.com/watch?v=Du1a_dgGoXc',
+  selector: 'form input[name=url]'
+};
+
+submitVideo = (...fields) => {
+  browser.url('/videos/create');
+  fields.forEach(field => {
+    browser.setValue(field.selector, field.value);
+  });
+  browser.click('.submit-button');
+};
 
 describe('when a user visits the landing page with no existing videos', () => {
   it('renders an empty `videos-container` element', () => {
@@ -18,43 +37,21 @@ describe('when a user visits the landing page with no existing videos', () => {
 
 describe('when a user visits the landing page with an exiting video', () => {
   it('renders it in the list', () => {
-    const title = 'Magnetic Sound Effects';
-    const description = 'Collection of interesting magnetic sounds';
-
-    browser.url('/videos/create');
-    browser.setValue('form input[name=title]', title);
-    browser.setValue('form textarea', description);
-    browser.click('.submit-button');
+    submitVideo(title, description, url);
     browser.url('/');
-    assert.include(browser.getText('#videos-container'), title);
+    assert.include(browser.getText('#videos-container'), title.value);
   });
 
   it('renders an iframe with a video URL', () => {
-    const title = 'Magnetic Sound Effects';
-    const description = 'Collection of interesting magnetic sounds';
-    const url = 'https://www.youtube.com/watch?v=Du1a_dgGoXc';
-
-    browser.url('/videos/create');
-    browser.setValue('form input[name=title]', title);
-    browser.setValue('form textarea', description);
-    browser.setValue('form input[name=url]', url);
-    browser.click('.submit-button');
+    submitVideo(title, description, url);
     browser.url('/');
-    assert.equal(browser.getAttribute('iframe', 'src'), url);
+    assert.equal(browser.getAttribute('iframe', 'src'), url.value);
   });
 
   it('renders a link to the video details page at `videos/:videoId`', () => {
-    const title = 'Magnetic Sound Effects';
-    const description = 'Collection of interesting magnetic sounds';
-    const url = 'https://www.youtube.com/watch?v=Du1a_dgGoXc';
-
-    browser.url('/videos/create');
-    browser.setValue('form input[name=title]', title);
-    browser.setValue('form textarea', description);
-    browser.setValue('form input[name=url]', url);
-    browser.click('.submit-button');
+    submitVideo(title, description, url);
     browser.url('/');
     browser.click('.video-title a');
-    assert.include(browser.getText('.contents-container'), description);
+    assert.include(browser.getText('.contents-container'), description.value);
   });
 });
