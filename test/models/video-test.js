@@ -17,6 +17,15 @@ describe('Video model', () => {
 
       assert.strictEqual(video.title, titleAsInt.toString());
     });
+
+    it('is required', () => {
+      const video = new Video({
+        description: 'test',
+        url: 'http://google.com'
+      });
+      video.validateSync();
+      assert.equal(video.errors.title.message, 'Title is required.');
+    });
   });
 
   describe('#description', () => {
@@ -34,6 +43,15 @@ describe('Video model', () => {
       const video = new Video({ url: urlAsInt });
 
       assert.strictEqual(video.url, urlAsInt.toString());
+    });
+
+    it('is required', () => {
+      const video = new Video({
+        title: 'test',
+        description: 'testing 1, 2, 3....'
+      });
+      video.validateSync();
+      assert.equal(video.errors.url.message, 'Video URL is required.');
     });
   });
 });
