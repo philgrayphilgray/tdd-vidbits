@@ -40,6 +40,16 @@ describe('Server path: `/videos`', () => {
       );
     });
 
+    it('contains an iframe with the submitted src value', async () => {
+      const video = await Video.create(testVideoToCreate);
+      const response = await request(app).get('/videos');
+
+      assert.equal(
+        parseFromHTML(response.text, '.video-player', 'src'),
+        video.url
+      );
+    });
+
     describe('/videos/:id', () => {
       it('should render a specific video page', async () => {
         const video = await Video.create(testVideoToCreate);

@@ -1,5 +1,7 @@
 const { assert } = require('chai');
 
+// const generateRandomUrl = domain => `http//${domain}/${Math.random()}`;
+
 describe('when a user visits the landing page with no existing videos', () => {
   it('renders an empty `videos-container` element', () => {
     browser.url('/');
@@ -38,6 +40,6 @@ describe('when a user visits the landing page with an exiting video', () => {
     browser.setValue('form input[name=url]', url);
     browser.click('.submit-button');
     browser.url('/');
-    assert.equal(browser.getAttribute('iframe', 'src'), 'http://example.com/');
+    assert.equal(browser.getAttribute('iframe', 'src'), url);
   });
 });
