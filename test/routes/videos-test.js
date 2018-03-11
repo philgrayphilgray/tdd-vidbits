@@ -25,7 +25,8 @@ describe('Server path: `/videos`', () => {
   afterEach(disconnectDatabase);
   const testVideoToCreate = {
     title: 'Magnetic Sound Effects',
-    description: 'Collection of interesting magnetic sounds'
+    description: 'Collection of interesting magnetic sounds',
+    videoUrl: 'https://www.youtube.com/watch?v=Du1a_dgGoXc'
   };
 
   describe('GET', () => {
@@ -53,6 +54,17 @@ describe('Server path: `/videos`', () => {
   });
 
   describe('POST', () => {
+    it('saves a Video document with a video URL', async () => {
+      const response = await request(app)
+        .post('/videos')
+        .type('form')
+        .send(testVideoToCreate);
+
+      const video = await Video.findOne({});
+
+      assert.equal(video.videoUrl, testVideoToCreate.videoUrl);
+    });
+
     describe('when the title is missing', () => {
       it('does not save the video', async () => {
         // copy with only the description property
