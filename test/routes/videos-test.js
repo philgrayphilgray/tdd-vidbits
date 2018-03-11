@@ -61,6 +61,18 @@ describe('Server path: `/videos`', () => {
         );
       });
     });
+
+    describe('`/videos/:videoId/edit`', () => {
+      it('should render an edit form with the current values', async () => {
+        const video = await Video.create(testVideoToCreate);
+        const response = await request(app).get(`/videos/${video._id}/edit`);
+
+        assert.include(
+          parseFromHTML(response.text, 'input[name="title"]', 'value'),
+          video.title
+        );
+      });
+    });
   });
 
   describe('POST', () => {

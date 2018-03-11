@@ -28,4 +28,9 @@ router.get('/:videoId', async (req, res, next) => {
   res.render('videos/show', { video });
 });
 
+router.get('/:videoId/edit', async (req, res) => {
+  const video = await Video.findById({ _id: req.params.videoId });
+  res.render('videos/create', { video });
+});
+
 module.exports = router;

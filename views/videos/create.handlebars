@@ -4,11 +4,12 @@
         {{#with video.errors.title as |error|}}
         <span class="error">{{error.message}}</span>
         {{/with}}
-        <input type="text" name="title" value={{video.title}}>
+        <input type="text" name="title" value="{{video.title}}">
+
         <textarea name="description" cols="30" rows="10">{{video.description}}</textarea> {{#with video.errors.url as |error|}}
         <span class="error">{{error.message}}</span>
         {{/with}}
-        <input type="url" name="url" value={{video.url}}>
+        <input type="url" name="url" value="{{video.url}}">
         <button type="submit" class="submit-button">Save</button>
     </form>
 </div>
