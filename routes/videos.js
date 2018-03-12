@@ -33,4 +33,15 @@ router.get('/:videoId/edit', async (req, res) => {
   res.render('videos/edit', { video });
 });
 
+router.post('/:videoId/updates', async (req, res) => {
+  let { title, description, url } = req.body;
+  const video = await Video.findByIdAndUpdate(req.params.videoId, {
+    title,
+    description,
+    url
+  });
+
+  res.redirect(`/videos/${video._id}`);
+});
+
 module.exports = router;

@@ -160,5 +160,19 @@ describe('Server path: `/videos`', () => {
         );
       });
     });
+    describe('`videos/:id/updates`', () => {
+      it('updates the current record', async () => {
+        const updatedTitle = 'Updated Title';
+        const video = await Video.create(testVideoToCreate);
+        const response = await request(app)
+          .post(`/videos/${video._id}/updates`)
+          .type('form')
+          .send({ ...testVideoToCreate, title: updatedTitle });
+
+        const updatedVideo = await Video.findOne({});
+
+        assert.equal(updatedVideo.title, updatedTitle);
+      });
+    });
   });
 });

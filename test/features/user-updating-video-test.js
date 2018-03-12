@@ -27,8 +27,8 @@ describe('when a user clicks to edit a Video', () => {
     browser.click('#edit');
     // assert.equal(browser.getText('h1'), `Edit ${title}`);
     const newTitle = { ...title, value: 'New Title' };
-    submitVideo(newTitle);
-    assert.equal(browser.getText('h2'), newTitle.value);
+    submitVideo(newTitle, description, url);
+    assert.equal(browser.getText('.video-title h1'), newTitle.value);
   });
 
   describe('and updates the video', () => {
@@ -37,7 +37,8 @@ describe('when a user clicks to edit a Video', () => {
       browser.click('#edit');
       // assert.equal(browser.getText('h1'), `Edit ${title}`);
       const newTitle = { ...title, value: 'New Title' };
-      submitVideo(newTitle);
+      browser.setValue(newTitle.selector, newTitle.value);
+      browser.click('.submit-button');
       browser.url('/');
       assert.notInclude(browser.getText('#videos-container'), title.value);
     });
