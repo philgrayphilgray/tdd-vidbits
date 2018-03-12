@@ -28,14 +28,14 @@ describe('when a user visits the landing page with no existing videos', () => {
     assert.equal(browser.getText('#videos-container'), '');
   });
 
-  it('renders a link that allows users to navigate to `videos/create.html`', () => {
+  it('renders a link that allows users to navigate to `videos/create`', () => {
     browser.url('/');
     browser.click('.add-video-button');
     assert.include(browser.getText('body'), 'Save a video');
   });
 });
 
-describe('when a user visits the landing page with an exiting video', () => {
+describe('when a user visits the landing page with an existing video', () => {
   it('renders it in the list', () => {
     submitVideo(title, description, url);
     browser.url('/');

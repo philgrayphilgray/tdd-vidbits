@@ -243,7 +243,7 @@ describe('Server path: `/videos`', () => {
           assert.equal(updatedVideo.title, updatedTitle);
         });
 
-        it('redirects to the `/videos/:id` and returns a status of 302', async () => {
+        it('redirects to `/videos/:id` and returns a status of 302', async () => {
           const updatedTitle = 'Updated Title';
           const video = await Video.create(testVideoToCreate);
           const response = await request(app)
