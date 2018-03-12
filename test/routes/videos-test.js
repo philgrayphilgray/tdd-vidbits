@@ -162,7 +162,7 @@ describe('Server path: `/videos`', () => {
     });
     describe('`videos/:id/updates`', () => {
       describe('when the update is submitted with validation errors', () => {
-        it('render the edit form with an error message', async () => {
+        it('renders the edit form with an error message', async () => {
           const updatedTitle = '';
           const video = await Video.create(testVideoToCreate);
           const response = await request(app)
@@ -174,6 +174,16 @@ describe('Server path: `/videos`', () => {
             parseFromHTML(response.text, '.error'),
             'Title is required.'
           );
+        });
+        it('responds with status 400', async () => {
+          const updatedTitle = '';
+          const video = await Video.create(testVideoToCreate);
+          const response = await request(app)
+            .post(`/videos/${video._id}/updates`)
+            .type('form')
+            .send({ title: updatedTitle });
+
+          assert.equal(response.status, 400);
         });
       });
 

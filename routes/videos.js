@@ -42,7 +42,7 @@ router.post('/:videoId/updates', async (req, res) => {
   );
   video.validateSync();
   if (video.errors) {
-    res.render('videos/edit', { video });
+    res.status(400).render('videos/edit', { video });
   } else {
     await video.save();
     res.redirect(`/videos/${video._id}`);
