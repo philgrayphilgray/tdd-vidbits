@@ -41,7 +41,7 @@ router.post('/:videoId/updates', async (req, res) => {
     url
   });
 
-  res.redirect(`/videos/${video._id}`);
+  res.status(302).redirect(`/videos/${video._id}`);
 });
 
 module.exports = router;

@@ -161,17 +161,39 @@ describe('Server path: `/videos`', () => {
       });
     });
     describe('`videos/:id/updates`', () => {
-      it('updates the current record', async () => {
-        const updatedTitle = 'Updated Title';
-        const video = await Video.create(testVideoToCreate);
-        const response = await request(app)
-          .post(`/videos/${video._id}/updates`)
-          .type('form')
-          .send({ ...testVideoToCreate, title: updatedTitle });
+      describe('when the video is submitted without validation errors', () => {
+        it('updates the current record', async () => {
+          const updatedTitle = 'Updated Title';
+          const video = await Video.create(testVideoToCreate);
+          const response = await request(app)
+            .post(`/videos/${video._id}/updates`)
+            .type('form')
+            .send({ ...testVideoToCreate, title: updatedTitle });
 
-        const updatedVideo = await Video.findOne({});
+          const updatedVideo = await Video.findOne({});
 
-        assert.equal(updatedVideo.title, updatedTitle);
+          assert.equal(updatedVideo.title, updatedTitle);
+        });
+
+        it('redirects to the `/videos/:id` and returns a status of 302', async () => {
+          const updatedTitle = 'Updated Title';
+          const video = await Video.create(testVideoToCreate);
+          const response = await request(app)
+            .post(`/videos/${video._id}/updates`)
+            .type('form')
+            .send({ ...testVideoToCreate, title: updatedTitle });
+
+          assert.equal(response.status, 302);
+
+          const updatedVideoResponse = await request(app).get(
+            `/videos/${video._id}`
+          );
+
+          assert.include(
+            parseFromHTML(updatedVideoResponse.text, '.video-title'),
+            updatedTitle
+          );
+        });
       });
     });
   });
