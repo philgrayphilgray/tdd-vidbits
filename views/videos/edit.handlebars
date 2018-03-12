@@ -1,15 +1,18 @@
 <div class="contents-container">
     <h2>Edit "{{video.title}}"</h2>
     <form method="post" action="/videos/{{video._id}}/updates">
+        <label for="url">URL: </label>
+        {{#with video.errors.url as |error|}}
+        <span class="error">{{error.message}}</span>
+        {{/with}}
+        <input type="url" name="url" value="{{video.url}}">
+        <label for="title">Title: </label>
         {{#with video.errors.title as |error|}}
         <span class="error">{{error.message}}</span>
         {{/with}}
         <input type="text" name="title" value="{{video.title}}">
-
-        <textarea name="description" cols="30" rows="10">{{video.description}}</textarea> {{#with video.errors.url as |error|}}
-        <span class="error">{{error.message}}</span>
-        {{/with}}
-        <input type="url" name="url" value="{{video.url}}">
+        <label for="description">Description</label>
+        <textarea name="description" cols="30" rows="10">{{video.description}}</textarea>
         <button type="submit" class="submit-button">Save</button>
     </form>
 </div>

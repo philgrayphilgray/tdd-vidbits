@@ -205,12 +205,13 @@ describe('Server path: `/videos`', () => {
     describe('`videos/:id/updates`', () => {
       describe('when the update is submitted with validation errors', () => {
         it('renders the edit form with an error message', async () => {
-          const updatedTitle = '';
+          const { description, url, title } = testVideoToCreate;
+          const testVideoToCreateWithoutTitle = { description, url };
           const video = await Video.create(testVideoToCreate);
           const response = await request(app)
             .post(`/videos/${video._id}/updates`)
             .type('form')
-            .send({ title: updatedTitle });
+            .send(testVideoToCreateWithoutTitle);
 
           assert.include(
             parseFromHTML(response.text, '.error'),
