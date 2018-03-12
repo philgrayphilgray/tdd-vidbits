@@ -28,6 +28,18 @@ describe('when a user clicks to edit a Video', () => {
     // assert.equal(browser.getText('h1'), `Edit ${title}`);
     const newTitle = { ...title, value: 'New Title' };
     submitVideo(newTitle);
-    assert.equal(browser.getText('.video-title h1'), newTitle.value);
+    assert.equal(browser.getText('h2'), newTitle.value);
+  });
+
+  describe('and updates the video', () => {
+    it('should not create an additional video', () => {
+      submitVideo(title, description, url);
+      browser.click('#edit');
+      // assert.equal(browser.getText('h1'), `Edit ${title}`);
+      const newTitle = { ...title, value: 'New Title' };
+      submitVideo(newTitle);
+      browser.url('/');
+      assert.notInclude(browser.getText('#videos-container'), title.value);
+    });
   });
 });

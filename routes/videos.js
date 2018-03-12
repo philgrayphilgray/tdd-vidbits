@@ -30,7 +30,7 @@ router.get('/:videoId', async (req, res, next) => {
 
 router.get('/:videoId/edit', async (req, res) => {
   const video = await Video.findById({ _id: req.params.videoId });
-  res.render('videos/create', { video });
+  res.render('videos/edit', { video });
 });
 
 module.exports = router;
