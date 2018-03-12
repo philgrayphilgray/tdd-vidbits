@@ -161,7 +161,23 @@ describe('Server path: `/videos`', () => {
       });
     });
     describe('`videos/:id/updates`', () => {
-      describe('when the video is submitted without validation errors', () => {
+      describe('when the update is submitted with validation errors', () => {
+        it('render the edit form with an error message', async () => {
+          const updatedTitle = '';
+          const video = await Video.create(testVideoToCreate);
+          const response = await request(app)
+            .post(`/videos/${video._id}/updates`)
+            .type('form')
+            .send({ title: updatedTitle });
+
+          assert.include(
+            parseFromHTML(response.text, '.error'),
+            'Title is required.'
+          );
+        });
+      });
+
+      describe('when the update is submitted without validation errors', () => {
         it('updates the current record', async () => {
           const updatedTitle = 'Updated Title';
           const video = await Video.create(testVideoToCreate);
