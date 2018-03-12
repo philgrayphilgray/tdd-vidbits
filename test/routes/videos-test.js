@@ -222,5 +222,21 @@ describe('Server path: `/videos`', () => {
         });
       });
     });
+    describe('`videos/:id/deletions`', () => {
+      it('removes the record', async () => {
+        await request(app)
+          .post('/videos')
+          .type('form')
+          .send(testVideoToCreate);
+
+        const video = await Video.findOne({});
+
+        await request(app).post(`/videos/${video._id}/deletions`);
+
+        const videos = await Video.find({});
+
+        assert.isEmpty(videos);
+      });
+    });
   });
 });

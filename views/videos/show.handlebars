@@ -4,9 +4,8 @@
         <form method="get" action="/videos/{{video._id}}/edit">
             <button id="edit" class="input-button">Edit</button>
         </form>
-        <form action="">
+        <form method="post" action="/videos/{{video._id}}/deletions">
             <button id="delete" class="input-button">Delete</button>
-
         </form>
         <div class="video-title">
             <h1>{{video.title}}</h1>
