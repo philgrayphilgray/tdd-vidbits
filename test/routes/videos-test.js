@@ -76,90 +76,132 @@ describe('Server path: `/videos`', () => {
   });
 
   describe('POST', () => {
-    it('saves a Video document with a video URL', async () => {
-      const response = await request(app)
-        .post('/videos')
-        .type('form')
-        .send(testVideoToCreate);
-
-      const video = await Video.findOne({});
-
-      assert.equal(video.url, testVideoToCreate.url);
-    });
-
-    describe('when the title is missing', () => {
-      const { description, url, title } = testVideoToCreate;
-      const testVideoToCreateWithoutTitle = { description, url };
-
-      it('does not save the video', async () => {
+    describe('when a new video is submitted to the server', () => {
+      it('saves a Video document with a video URL', async () => {
         const response = await request(app)
           .post('/videos')
           .type('form')
-          .send(testVideoToCreateWithoutTitle);
+          .send(testVideoToCreate);
 
-        const allItems = await Video.find({});
+        const video = await Video.findOne({});
 
-        assert.isEmpty(allItems);
+        assert.equal(video.url, testVideoToCreate.url);
+      });
+      it('responds to new video creation with the status code 302', async () => {
+        const response = await request(app)
+          .post('/videos')
+          .type('form')
+          .send(testVideoToCreate);
+        assert.equal(response.status, 302);
       });
 
-      it('responds with a status `400`', async () => {
+      it('submits a video with a title and description', async () => {
         const response = await request(app)
           .post('/videos')
           .type('form')
-          .send(testVideoToCreateWithoutTitle);
+          .send(testVideoToCreate);
 
-        assert.equal(response.status, 400);
-      });
+        const video = await Video.findOne({});
 
-      it('renders `videos/create`', async () => {
-        const response = await request(app)
-          .post('/videos')
-          .type('form')
-          .send(testVideoToCreateWithoutTitle);
+        assert.equal(video.title, testVideoToCreate.title);
 
-        assert.include(parseFromHTML(response.text, '.submit-button'), 'Save');
-      });
+        // now check the video page
+        const { _id } = video;
+        const getResponse = await request(app).get(`/videos/${_id}`);
 
-      it('renders a validation error message', async () => {
-        const response = await request(app)
-          .post('/videos')
-          .type('form')
-          .send(testVideoToCreateWithoutTitle);
-
-        assert.include(
-          parseFromHTML(response.text, '.error'),
-          'Title is required.'
-        );
-      });
-
-      it('preserves other field values', async () => {
-        const response = await request(app)
-          .post('/videos')
-          .type('form')
-          .send(testVideoToCreateWithoutTitle);
         assert.equal(
-          parseFromHTML(response.text, 'textarea[name="description"]', 'value'),
-          description
+          parseFromHTML(getResponse.text, 'h1'),
+          testVideoToCreate.title
         );
+        assert.equal(
+          parseFromHTML(getResponse.text, 'p'),
+          testVideoToCreate.description
+        );
+      });
+
+      describe('when the title is missing', () => {
+        // destructure values from test object for remixing
+        const { description, url, title } = testVideoToCreate;
+        const testVideoToCreateWithoutTitle = { description, url };
+
+        it('does not save the video', async () => {
+          const response = await request(app)
+            .post('/videos')
+            .type('form')
+            .send(testVideoToCreateWithoutTitle);
+
+          const allItems = await Video.find({});
+
+          assert.isEmpty(allItems);
+        });
+
+        it('responds with a status `400`', async () => {
+          const response = await request(app)
+            .post('/videos')
+            .type('form')
+            .send(testVideoToCreateWithoutTitle);
+
+          assert.equal(response.status, 400);
+        });
+
+        it('renders `videos/create`', async () => {
+          const response = await request(app)
+            .post('/videos')
+            .type('form')
+            .send(testVideoToCreateWithoutTitle);
+
+          assert.include(
+            parseFromHTML(response.text, '.submit-button'),
+            'Save'
+          );
+        });
+
+        it('renders a validation error message', async () => {
+          const response = await request(app)
+            .post('/videos')
+            .type('form')
+            .send(testVideoToCreateWithoutTitle);
+
+          assert.include(
+            parseFromHTML(response.text, '.error'),
+            'Title is required.'
+          );
+        });
+
+        it('preserves other field values', async () => {
+          const response = await request(app)
+            .post('/videos')
+            .type('form')
+            .send(testVideoToCreateWithoutTitle);
+          assert.equal(
+            parseFromHTML(
+              response.text,
+              'textarea[name="description"]',
+              'value'
+            ),
+            description
+          );
+        });
+      });
+
+      describe('when the URL field is missing', () => {
+        const { description, url, title } = testVideoToCreate;
+        const testVideoToCreateWithoutUrl = { description, title };
+
+        it('renders a validation error message', async () => {
+          const response = await request(app)
+            .post('/videos')
+            .type('form')
+            .send(testVideoToCreateWithoutUrl);
+
+          assert.include(
+            parseFromHTML(response.text, '.error'),
+            'Video URL is required.'
+          );
+        });
       });
     });
 
-    describe('when the URL field is missing', () => {
-      const { description, url, title } = testVideoToCreate;
-      const testVideoToCreateWithoutUrl = { description, title };
-
-      it('renders a validation error message', async () => {
-        const response = await request(app)
-          .post('/videos')
-          .type('form')
-          .send(testVideoToCreateWithoutUrl);
-
-        assert.include(
-          parseFromHTML(response.text, '.error'),
-          'Video URL is required.'
-        );
-      });
-    });
     describe('`videos/:id/updates`', () => {
       describe('when the update is submitted with validation errors', () => {
         it('renders the edit form with an error message', async () => {
@@ -223,7 +265,7 @@ describe('Server path: `/videos`', () => {
       });
     });
     describe('`videos/:id/deletions`', () => {
-      it('removes the record', async () => {
+      it('removes the record from the database', async () => {
         await request(app)
           .post('/videos')
           .type('form')
